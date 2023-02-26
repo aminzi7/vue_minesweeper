@@ -1,22 +1,15 @@
 import { defineStore } from "pinia";
 
 interface ITheme {
-  isFlag: boolean;
+  isDark: boolean;
 }
 const useTemeStore = defineStore("theme", {
   state: (): ITheme => ({
-    isFlag: false,
+    isDark: true,
   }),
   actions: {
     setTheme() {
-      document.documentElement.setAttribute("current-theme", "dark");
-    },
-    removeTheme() {
-      document.documentElement.removeAttribute("current-theme");
-    },
-    handelTheme() {
-      this.isFlag = !this.isFlag;
-      this.isFlag ? this.setTheme() : this.removeTheme();
+      this.isDark = !this.isDark;
     },
   },
 });

@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import minHeader from "@/components/minHeader.vue";
 import minCentre from "@/components/minCentre.vue";
+import useTemeStore from "./stores/theme/theme";
+import { storeToRefs } from "pinia";
+
+const useTheme = useTemeStore();
+const { isDark } = storeToRefs(useTheme);
 </script>
 
 <template>
-  <div class="main" :current-theme="true ? 'dark' : 'light'">
+  <div class="main" :current-theme="isDark ? 'dark' : 'light'">
     <minHeader></minHeader>
     <minCentre></minCentre>
   </div>

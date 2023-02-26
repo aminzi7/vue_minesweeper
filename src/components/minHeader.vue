@@ -1,6 +1,6 @@
 <template>
   <div class="minesweeper-header">
-    <button @click="handelTheme">{{ comTheme }}</button>
+    <button @click="useTheme.setTheme">{{ comTheme }}</button>
   </div>
 </template>
 
@@ -9,9 +9,8 @@ import { computed, onMounted } from "vue";
 import useThemeStore from "@/stores/theme/theme";
 
 const useTheme = useThemeStore();
-const { isFlag, handelTheme } = useTheme;
 const comTheme = computed(() => {
-  return isFlag ? "dark" : "light";
+  return useTheme.isDark ? "dark" : "light";
 });
 
 onMounted(() => {
