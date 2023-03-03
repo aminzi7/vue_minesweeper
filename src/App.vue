@@ -20,6 +20,9 @@ const { isDark } = storeToRefs(useTheme);
   display: flex;
   width: 100%;
   height: 100%;
-  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  // margin: 0 auto;
+  // flex-wrap: wrap;
 }
 </style>
