@@ -5,7 +5,10 @@
         v-for="(item, x) in row"
         :key="x"
         @click="btnCLick(x, y)"
-        :style="{ color: getBlockColor(item) }"
+        :style="{
+          color: getBlockColor(item),
+          backgroundColor: item.mine ? '#471818' : 'transparent',
+        }"
       >
         <div v-if="item.mine">
           <MinIcon></MinIcon>
@@ -83,12 +86,15 @@ function updateNumbers() {
   });
 }
 const numberColor = [
+  "transparent",
   "green",
-  "cyan",
   "aquamarine",
   "yellow",
   "darkgoldenrod",
-  "darkgreen",
+  "chartreuse",
+  "indianred",
+  "khaki",
+  "cyan",
 ];
 // 颜色快
 function getBlockColor(block: BlockState) {
@@ -105,9 +111,7 @@ updateNumbers();
     width: 20px;
     height: 20px;
     vertical-align: top;
-  }
-  .red {
-    color: red;
+    color: #471818;
   }
   color: #fff;
   .tt {
