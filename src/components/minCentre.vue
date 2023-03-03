@@ -1,5 +1,6 @@
 <template>
   <div class="min-centre">
+    <div class="tt">hovber</div>
     <div v-for="(row, y) in state" :key="y">
       <button
         v-for="(item, x) in row"
@@ -98,7 +99,7 @@ const numberColor = [
 ];
 // 颜色快
 function getBlockColor(block: BlockState) {
-  return block.mine ? "red" : numberColor[block.adjacentMines];
+  return block.mine ? "#fff" : numberColor[block.adjacentMines];
 }
 
 generateMines();
@@ -115,8 +116,9 @@ updateNumbers();
   }
   color: #fff;
   .tt {
-    display: flex;
-    flex-direction: row;
+    &:hover {
+      background-color: aqua;
+    }
   }
   button {
     width: 40px;
@@ -126,7 +128,7 @@ updateNumbers();
     border: 1px solid #ffffff;
     color: #fff;
     &:hover {
-      background-color: rgb(48, 59, 59);
+      background-color: rgb(134, 148, 148) !important;
     }
   }
 }
