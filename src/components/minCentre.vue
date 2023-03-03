@@ -3,13 +3,11 @@
     <div v-for="(row, y) in state" :key="y">
       <button
         v-for="(item, x) in row"
-        :class="MineColor(item)"
         :key="x"
         @click="btnCLick(x, y)"
-        class="i-mdi:mine"
+        :style="{ color: getBlockColor(item) }"
       >
         <div v-if="item.mine">
-          <!-- <img class="imge" src="@/assets/picture/MdiMine.svg" alt="" /> -->
           <MinIcon></MinIcon>
         </div>
         <div v-else>
@@ -84,9 +82,19 @@ function updateNumbers() {
     });
   });
 }
-function MineColor(block: BlockState) {
-  return block.mine ? "red" : "with";
+const numberColor = [
+  "green",
+  "cyan",
+  "aquamarine",
+  "yellow",
+  "darkgoldenrod",
+  "darkgreen",
+];
+// 颜色快
+function getBlockColor(block: BlockState) {
+  return block.mine ? "red" : numberColor[block.adjacentMines];
 }
+
 generateMines();
 updateNumbers();
 </script>
@@ -100,7 +108,6 @@ updateNumbers();
   }
   .red {
     color: red;
-    background-color: rgb(51, 26, 26);
   }
   color: #fff;
   .tt {

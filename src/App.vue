@@ -22,7 +22,5 @@ const { isDark } = storeToRefs(useTheme);
   height: 100%;
   text-align: center;
   flex-direction: column;
-  // margin: 0 auto;
-  // flex-wrap: wrap;
 }
 </style>
