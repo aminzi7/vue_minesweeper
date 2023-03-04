@@ -1,21 +1,20 @@
 <template>
   <div class="min-centre">
-    <div class="tt">hovber</div>
     <div v-for="(row, y) in state" :key="y">
       <button
-        v-for="(item, x) in row"
+        v-for="(block, x) in row"
         :key="x"
-        @click="btnCLick(x, y)"
+        @click="btnCLick(block)"
         :style="{
-          color: getBlockColor(item),
-          backgroundColor: item.mine ? '#471818' : 'transparent',
+          color: getBlockColor(block),
+          backgroundColor: getBGC(block),
         }"
       >
-        <div v-if="item.mine">
+        <div v-if="block.mine">
           <MinIcon></MinIcon>
         </div>
         <div v-else>
-          {{ item.adjacentMines }}
+          {{ block.adjacentMines }}
         </div>
       </button>
     </div>
@@ -25,8 +24,10 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import MinIcon from "@/components/minIcone.vue";
-function btnCLick(x: number, y: number) {
-  console.log(x, y, "-", x * y);
+
+function btnCLick(block: BlockState) {
+  // 记录没翻拍
+  block.revealed = true;
 }
 
 interface BlockState {
@@ -35,6 +36,7 @@ interface BlockState {
   mine?: boolean;
   flagged?: boolean;
   adjacentMines: number;
+  revealed: boolean;
 }
 
 const WIDTH = 10;
@@ -47,6 +49,7 @@ const state = reactive(
         x,
         y,
         adjacentMines: 0,
+        revealed: false,
       })
     )
   )
@@ -99,7 +102,18 @@ const numberColor = [
 ];
 // 颜色快
 function getBlockColor(block: BlockState) {
+  // 没翻拍，默认没样式
+  if (!block.revealed) {
+    return "";
+  }
   return block.mine ? "#fff" : numberColor[block.adjacentMines];
+}
+// 背景色
+function getBGC(block: BlockState) {
+  if (!block.revealed) {
+    return "";
+  }
+  return block.mine ? "#471818" : "transparent";
 }
 
 generateMines();
@@ -115,11 +129,7 @@ updateNumbers();
     color: #471818;
   }
   color: #fff;
-  .tt {
-    &:hover {
-      background-color: aqua;
-    }
-  }
+
   button {
     width: 40px;
     height: 40px;
