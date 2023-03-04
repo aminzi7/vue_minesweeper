@@ -17,7 +17,8 @@
         </template>
         <template v-else-if="block.revealed || dev">
           <div v-if="block.mine">
-            <MinIcon></MinIcon>
+            <!-- <MinIcon></MinIcon> -->
+            <div>💀</div>
           </div>
           <div v-else>
             {{ block.adjacentMines }}
@@ -30,7 +31,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import MinIcon from "@/components/minIcone.vue";
 
 let mineGenerated = false;
 let dev = false;
