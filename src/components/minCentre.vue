@@ -1,6 +1,6 @@
 <template>
   <div class="min-centre">
-    <div v-for="(row, y) in state" :key="y">
+    <div v-for="(row, y) in state" :key="y" class="row-btn">
       <button
         v-for="(block, x) in row"
         :key="x"
@@ -10,12 +10,14 @@
           backgroundColor: getBGC(block),
         }"
       >
-        <div v-if="block.mine">
-          <MinIcon></MinIcon>
-        </div>
-        <div v-else>
-          {{ block.adjacentMines }}
-        </div>
+        <template v-if="block.revealed">
+          <div v-if="block.mine">
+            <MinIcon></MinIcon>
+          </div>
+          <div v-else>
+            {{ block.adjacentMines }}
+          </div>
+        </template>
       </button>
     </div>
   </div>
@@ -122,6 +124,10 @@ updateNumbers();
 
 <style lang="less" scoped>
 .min-centre {
+  .row-btn {
+    display: flex;
+    justify-content: center;
+  }
   .imge {
     width: 20px;
     height: 20px;
