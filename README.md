@@ -29,6 +29,8 @@ npm install
 
 ### Compile and Hot-Reload for Development
 
+### link https://aminzi-sweeper.netlify.app/
+
 ```sh
 npm run dev
 ```
