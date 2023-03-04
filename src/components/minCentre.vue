@@ -2,15 +2,20 @@
   <div class="min-centre">
     <div v-for="(row, y) in state" :key="y" class="row-btn">
       <button
+        ref="btnRef"
         v-for="(block, x) in row"
         :key="x"
-        @click="btnCLick(block)"
+        @click="btnCLick($event, block)"
         :style="{
           color: getBlockColor(block),
           backgroundColor: getBGC(block),
         }"
+        @contextmenu.prevent="onRightClick(block)"
       >
-        <template v-if="block.revealed || dev">
+        <template v-if="block.flagged">
+          <div>👌</div>
+        </template>
+        <template v-else-if="block.revealed || dev">
           <div v-if="block.mine">
             <MinIcon></MinIcon>
           </div>
@@ -24,12 +29,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { ref } from "vue";
 import MinIcon from "@/components/minIcone.vue";
 
 let mineGenerated = false;
-let dev = true;
-function btnCLick(block: BlockState) {
+let dev = false;
+function onRightClick(block: BlockState) {
+  if (block.revealed) return;
+  block.flagged = !block.flagged;
+  checkGame();
+}
+function btnCLick(e: MouseEvent, block: BlockState) {
   if (!mineGenerated) {
     generateMines(block);
     mineGenerated = true;
@@ -40,6 +50,7 @@ function btnCLick(block: BlockState) {
     alert("BOOOOOM!");
   }
   expendZ(block);
+  checkGame();
 }
 
 interface BlockState {
@@ -50,10 +61,10 @@ interface BlockState {
   adjacentMines: number;
   revealed: boolean;
 }
-
 const WIDTH = 10;
 const HEIGHT = 10;
-const state = reactive(
+
+const state = ref(
   Array.from({ length: HEIGHT }, (_, y) =>
     Array.from(
       { length: WIDTH },
@@ -68,7 +79,7 @@ const state = reactive(
 );
 
 function generateMines(init: BlockState) {
-  for (const raw of state) {
+  for (const raw of state.value) {
     for (const block of raw) {
       // 一开始确保点不了炸弹,边缘判断
       if (Math.abs(init.x - block.x) <= 1) continue;
@@ -102,7 +113,7 @@ const directions = [
 ];
 
 function updateNumbers() {
-  state.forEach((raw, y) => {
+  state.value.forEach((raw, y) => {
     raw.forEach((block, x) => {
       if (block.mine) return;
       getSiblings(block).forEach((b) => {
@@ -122,24 +133,26 @@ const numberColor = [
   "khaki",
   "cyan",
 ];
+const btnRef = ref();
 // 颜色快
 function getBlockColor(block: BlockState) {
   // 没翻拍，默认没样式
   if (!block.revealed) {
     return "";
   }
+  // if(block.flagged)
   return block.mine ? "#fff" : numberColor[block.adjacentMines];
 }
 // 背景色
 function getBGC(block: BlockState) {
+  if (block.flagged) {
+    return "rgba(125, 125, 125, .6)";
+  }
   if (!block.revealed) {
-    return "";
+    return "rgba(125, 125, 125, .6)";
   }
   return block.mine ? "#471818" : "transparent";
 }
-
-// generateMines();
-// updateNumbers();
 
 function getSiblings(block: BlockState) {
   return directions
@@ -149,14 +162,26 @@ function getSiblings(block: BlockState) {
       if (x2 < 0 || x2 >= WIDTH || y2 < 0 || y2 >= HEIGHT) {
         return undefined;
       }
-      return state[y2][x2];
+      return state.value[y2][x2];
     })
     .filter(Boolean) as BlockState[];
+}
+
+function checkGame() {
+  const blocks = state.value.flat();
+  if (blocks.every((block) => block.revealed || block.flagged)) {
+    if (blocks.some((block) => block.flagged && !block.mine)) {
+      alert("cheat");
+    } else {
+      alert("win!");
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .min-centre {
+  padding-top: 100px;
   .row-btn {
     display: flex;
     justify-content: center;
@@ -174,10 +199,11 @@ function getSiblings(block: BlockState) {
     height: 40px;
     padding: 0;
     background-color: transparent;
-    border: 1px solid #ffffff;
+    // border: 1px solid #ffffff;
+    border: 1px solid #2e2e2e;
     color: #fff;
     &:hover {
-      background-color: rgb(134, 148, 148) !important;
+      background-color: rgb(159, 201, 201) !important;
     }
   }
 }

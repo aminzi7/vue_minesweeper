@@ -1,6 +1,6 @@
 <template>
   <div class="minesweeper-header">
-    <button @click="useTheme.setTheme">{{ comTheme }}</button>
+    <!-- <button @click="useTheme.setTheme">{{ comTheme }}</button> -->
   </div>
 </template>
 
