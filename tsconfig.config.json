@@ -9,7 +9,9 @@
   "compilerOptions": {
     "composite": true,
     "types": ["node"],
-    "target": "es5",
+    "module": "ESNext",
+    "target": "es2016",
     "lib": ["dom", "ES2019", "ESNext"]
-  }
+  },
+  "exclude": ["dist", "node_modules"]
 }

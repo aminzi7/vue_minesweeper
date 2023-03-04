@@ -61,8 +61,8 @@ interface BlockState {
   adjacentMines: number;
   revealed: boolean;
 }
-const WIDTH = 10;
-const HEIGHT = 10;
+const WIDTH = 5;
+const HEIGHT = 5;
 
 const state = ref(
   Array.from({ length: HEIGHT }, (_, y) =>
@@ -166,11 +166,23 @@ function getSiblings(block: BlockState) {
     })
     .filter(Boolean) as BlockState[];
 }
+console.log(state.value.reduce);
+
+function flat(arr: any) {
+  if (Object.prototype.toString.call(arr) != "[object Array]") {
+    return false;
+  }
+
+  let res = arr.reduce((prev: any, cur: any) => {
+    return prev.concat(Array.isArray(cur) ? flat(cur) : cur);
+  }, []);
+  return res;
+}
 
 function checkGame() {
-  const blocks = state.value.flat();
-  if (blocks.every((block) => block.revealed || block.flagged)) {
-    if (blocks.some((block) => block.flagged && !block.mine)) {
+  const blocks = flat(state.value);
+  if (blocks.every((block: any) => block.revealed || block.flagged)) {
+    if (blocks.some((block: any) => block.flagged && !block.mine)) {
       alert("cheat");
     } else {
       alert("win!");
